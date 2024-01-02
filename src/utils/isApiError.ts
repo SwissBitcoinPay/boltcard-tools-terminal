@@ -3,7 +3,7 @@ import { MarkRequired, XOR } from "ts-essentials";
 
 type ApiErrorType = {
   field?: string;
-} & XOR<{ detail: string }, { reason: { detail: string } }>;
+} & XOR<{ reason: string }, { reason: { detail: string } }>;
 
 export const isApiError = (
   e: unknown

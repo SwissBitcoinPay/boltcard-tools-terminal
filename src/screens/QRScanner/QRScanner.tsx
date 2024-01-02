@@ -11,7 +11,7 @@ import {
 import { faLightbulb as faLightbulbOff } from "@fortawesome/free-regular-svg-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CamerasConfig } from "@components/QRCamera/types";
-import { useAccountConfig, useIsScreenSizeMin } from "@hooks";
+import { useInvoiceHandler, useIsScreenSizeMin } from "@hooks";
 import * as S from "./styled";
 
 const imagePadding = 8;
@@ -23,9 +23,9 @@ type LocationState = {
 
 export const QRScanner = () => {
   const { height: windowHeight } = useWindowDimensions();
+  const { invoiceHandler } = useInvoiceHandler();
   const isLarge = useIsScreenSizeMin("large");
   const insets = useSafeAreaInsets();
-  const { onQrLogin, isLoading } = useAccountConfig({ refresh: false });
 
   const navigate = useNavigate();
   const location = useLocation<LocationState>();
@@ -54,15 +54,6 @@ export const QRScanner = () => {
     [config, deviceIndex]
   );
 
-  const onScan = useCallback(
-    async (value: string) => {
-      if (await onQrLogin?.(value)) {
-        navigate("/");
-      }
-    },
-    [navigate, onQrLogin]
-  );
-
   const onBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
@@ -77,7 +68,6 @@ export const QRScanner = () => {
     }
   }, [deviceIndex, config?.devicesNumber]);
 
-
   const holeY = useMemo(
     () => (windowHeight + insets.top + insets.bottom) / 2 - holeSize / 2,
     [windowHeight, insets.top, insets.bottom, holeSize]
@@ -85,22 +75,20 @@ export const QRScanner = () => {
 
   return (
     <>
-      {!isLoading && (
-        <S.Camera
-          deviceIndex={deviceIndex}
-          isTorchOn={isTorchOn}
-          setConfig={_setConfig}
-          onScan={onScan}
-          videoHeight={isLarge ? windowHeight - 260 : "100%"}
-        />
-      )}
-      {!isLoading && !isCameraLoading && placeholderPreset && (
+      <S.Camera
+        deviceIndex={deviceIndex}
+        isTorchOn={isTorchOn}
+        setConfig={_setConfig}
+        onScan={invoiceHandler}
+        videoHeight={isLarge ? windowHeight - 260 : "100%"}
+      />
+      {!isCameraLoading && placeholderPreset && (
         <Image
           source={placeholderPreset}
           style={{
             position: "absolute",
             opacity: 0.25,
-            borderRadius: 12,
+            borderRadius: 8,
             top: holeY + imagePadding,
             height: holeSize - imagePadding * 2 - 1,
             width: holeSize - imagePadding * 2 - 1
@@ -108,7 +96,7 @@ export const QRScanner = () => {
         />
       )}
       <PageContainer noHorizontalPadding isStrictTopMargin>
-        {!isCameraLoading && !isLoading ? (
+        {!isCameraLoading ? (
           <>
             <S.VerticialPart>
               {title && <S.TitleText weight={700}>{title}</S.TitleText>}

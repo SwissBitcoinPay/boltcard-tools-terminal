@@ -95,9 +95,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "ch.swissbitcoinpay.checkout"
+    namespace "org.boltcardtools.terminal"
     defaultConfig {
-        applicationId "ch.swissbitcoinpay.checkout"
+        applicationId "org.boltcardtools.terminal"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode generateVersionCode()
@@ -159,7 +159,7 @@ android {
         buildConfig = true
     }
 
-    namespace "ch.swissbitcoinpay.checkout"
+    namespace "org.boltcardtools.terminal"
 }
 
 dependencies {

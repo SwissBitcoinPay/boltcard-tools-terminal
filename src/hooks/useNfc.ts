@@ -12,9 +12,11 @@ export const useNfc = () => {
   const toast = useToast();
   const { t } = useTranslation();
   const [isNfcAvailable, setIsNfcAvailable] = useState(false);
+  const [isNfcScanning, setIsNfcScanning] = useState(false);
   const [isNfcLoading, setIsNfcLoading] = useState(false);
   const [isNfcNeedsTap, setIsNfcNeedsTap] = useState(false);
   const [isNfcNeedsPermission, setIsNfcNeedsPermission] = useState(false);
+  const [isNfcActionSuccess, setIsNfcActionSuccess] = useState(false);
 
   const setupNfc = useCallback(async () => {
     if (await getIsNfcSupported()) {
@@ -48,9 +50,12 @@ export const useNfc = () => {
 
   const readingNfcLoop = useCallback(
     async (pr: string) => {
+      setIsNfcActionSuccess(false);
       await NFC.stopRead();
 
+      setIsNfcScanning(true);
       NFC.startRead(async (nfcMessage) => {
+        setIsNfcScanning(false);
         setIsNfcLoading(true);
         const lightingPrefix = "lightning:";
         const lnurlwPrefix = "lnurlw://";
@@ -113,7 +118,7 @@ export const useNfc = () => {
 
             const { data: callbackResponseData } = await axios.get<{
               reason: { detail: string };
-              status: "OK";
+              status: "OK" | "ERROR";
             }>(cardDataResponse.callback, {
               params: {
                 k1: cardDataResponse.k1,
@@ -184,11 +189,18 @@ export const useNfc = () => {
 
         await NFC.stopRead();
 
-        if (debitCardData?.status !== "OK" || error) {
-          setIsNfcLoading(false);
-          toast.show(error?.reason?.detail || t("errors.unknown"), {
-            type: "error"
-          });
+        setIsNfcLoading(false);
+        if (debitCardData?.status === "OK" && !error) {
+          setIsNfcActionSuccess(true);
+        } else {
+          toast.show(
+            typeof error?.reason === "string"
+              ? error.reason
+              : error?.reason.detail || t("errors.unknown"),
+            {
+              type: "error"
+            }
+          );
 
           if (!isIos) {
             readingNfcLoop(pr);
@@ -204,18 +216,25 @@ export const useNfc = () => {
     [toast, t]
   );
 
+  const stopNfc = useCallback(() => {
+    setIsNfcScanning(false);
+    setIsNfcLoading(false);
+    void NFC.stopRead();
+  }, []);
+
   useEffect(() => {
-    return () => {
-      NFC.stopRead();
-    };
+    return stopNfc;
   }, []);
 
   return {
     isNfcAvailable,
+    isNfcScanning,
     isNfcLoading,
     isNfcNeedsTap,
     isNfcNeedsPermission,
+    isNfcActionSuccess,
     setupNfc,
+    stopNfc,
     readingNfcLoop
   };
 };

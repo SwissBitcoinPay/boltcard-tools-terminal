@@ -77,6 +77,8 @@ export const Button = ({
         return 36;
       case "large":
         return 58;
+      case "circle":
+        return 80;
     }
   }, [size]);
 
@@ -97,7 +99,7 @@ export const Button = ({
       size={size}
       primaryColor={primaryColor}
       disabled={disabled || isLoading}
-      isRound={!!icon && !title}
+      isRound={(!!icon && !title) || size === "circle"}
       android_ripple={{
         color: "rgba(0, 0, 0, 0.2)",
         foreground: true
@@ -112,7 +114,7 @@ export const Button = ({
       )}
       {title && (
         <S.ButtonText
-          numberOfLines={1}
+          numberOfLines={size !== "circle" ? 1 : undefined}
           weight={700}
           buttonSize={size}
           color={!isLoading ? secondaryColor : "transparent"}

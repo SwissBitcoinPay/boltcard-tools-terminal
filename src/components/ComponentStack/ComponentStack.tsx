@@ -1,17 +1,17 @@
-import { Children, Fragment, PropsWithChildren } from "react";
+import React, { Children, Fragment, PropsWithChildren } from "react";
 import { StyledComponentComponentProps } from "@types";
 import { MarkOptional } from "ts-essentials";
 import * as S from "./styled";
 import { useWindowDimensions } from "react-native";
 import { useIsScreenSizeMin } from "@hooks";
 
-type ComponentStackProps = MarkOptional<
-  StyledComponentComponentProps<typeof S.GapView>,
-  "direction"
->;
+type ComponentStackProps = {
+  componentAs?: React.ElementType;
+} & MarkOptional<StyledComponentComponentProps<typeof S.GapView>, "direction">;
 
 export const ComponentStack = ({
   children,
+  componentAs,
   direction = "vertical",
   gapColor,
   gapSize,
@@ -27,6 +27,7 @@ export const ComponentStack = ({
   return (
     <S.ComponentStack
       {...props}
+      as={componentAs}
       direction={direction}
       fullWidth={!isLarge && gapColor ? windowWidth : undefined}
     >

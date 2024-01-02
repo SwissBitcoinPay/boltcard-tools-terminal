@@ -1,12 +1,12 @@
-# Swiss Bitcoin Pay app
-<img alt="Swiss Bitcoin Pay" src="./docs/static/images/presentation.png" />
+# BoltCard Terminal Tools app
+<img alt="BoltCard Terminal Tools" src="./docs/static/images/presentation.png" />
 
 Swiss Bitcoin Pay is an easy-to-use solution to accept bitcoin payments in your business.
 
 [![MIT License](https://img.shields.io/github/license/frw/react-native-ssl-public-key-pinning)](LICENSE)
 ![Codemagic build status](https://api.codemagic.io/apps/6580220d95d4f2f104923fef/react-native-android/status_badge.svg)
 ![Netlify Status](https://api.netlify.com/api/v1/badges/0537dd5e-edb6-4a7a-ada0-0f3295e50a73/deploy-status)
-[![GitHub Repo stars](https://img.shields.io/github/stars/SwissBitcoinPay/app?style=social)](https://github.com/SwissBitcoinPay/app)
+[![GitHub Repo stars](https://img.shields.io/github/stars/SwissBitcoinPay/app?style=social)](https://github.com/SwissBitcoinPay/boltcard-tools-terminal)
 
 ## 🔍 Features
 

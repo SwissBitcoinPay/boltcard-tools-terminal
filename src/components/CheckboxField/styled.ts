@@ -11,6 +11,7 @@ export const PressableContainer = styled(Pressable)`
   margin: ${({ theme }) => theme.gridSize / 2}px 0px;
   flex-direction: row;
   align-self: flex-start;
+  align-items: center;
 `;
 
 export const LabelText = styled(Text)`

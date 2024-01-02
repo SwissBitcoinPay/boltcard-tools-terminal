@@ -1,7 +1,7 @@
 import { theme } from "@config/themes/theme";
 
-type SBPTheme = typeof theme;
+type Theme = typeof theme;
 
 declare module "styled-components" {
-  interface DefaultTheme extends SBPTheme {}
+  interface DefaultTheme extends Theme {}
 }

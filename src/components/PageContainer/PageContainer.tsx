@@ -1,7 +1,7 @@
 import { ComponentProps, useContext } from "react";
 import { StyledComponentComponentProps } from "@types";
 import { useIsScreenSizeMin } from "@hooks";
-import { SBPContext } from "@config";
+import { ThemeContext } from "@config";
 import { useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, View } from "@components";
@@ -23,7 +23,7 @@ export const PageContainer = ({
   ...props
 }: PageContainerProps) => {
   const isLarge = useIsScreenSizeMin("large");
-  const { headerHeight, setHeaderHeight } = useContext(SBPContext);
+  const { headerHeight, setHeaderHeight } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
 

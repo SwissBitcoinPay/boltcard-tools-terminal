@@ -14,7 +14,7 @@
         <true/>
         <key>provisioningProfiles</key>
         <dict>
-            <key>ch.swissbitcoinpay.checkout</key>
+            <key>org.boltcardtools.terminal</key>
             <string>dev_provisioning</string>
         </dict>
     </dict>

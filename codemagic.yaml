@@ -9,12 +9,12 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       android_signing:
-        - Swiss Bitcoin Pay Checkout
+        - BoltCard Terminal Tools 
       groups:
         - google_credentials
         - testfairy
       vars:
-        PACKAGE_NAME: "ch.swissbitcoinpay.checkout"
+        PACKAGE_NAME: "org.boltcardtools.terminal"
         SKIP_BUNDLING: 1
       java: 20
     scripts:
@@ -41,6 +41,10 @@ workflows:
       - android/app/build/outputs/**/*.aab
       - android/app/build/**/*.apk
       - android/app/build/**/outputs/**/mapping.txt
+    cache:
+      cache_paths:
+        - $CM_BUILD_DIR/node_modules
+        - $HOME/.gradle/caches
     publishing:
       email:
         recipients:
@@ -64,17 +68,17 @@ workflows:
         - authkey
       ios_signing:
         provisioning_profiles:
-          - dev_provisioning
-          - prod_provisioning
+          - boltcard_tools_terminal_dev_provisioning
+          - boltcard_tools_terminal_prod_provisioning
         certificates:
-          - dev_certificate
-          - prod_certificate
+          - boltcard_tools_terminal_dev_certificate
+          - boltcard_tools_terminal_prod_certificate
       vars:
-        BUNDLE_ID: "ch.swissbitcoinpay.checkout"
-        XCODE_WORKSPACE: "SwissBitcoinPay.xcworkspace"
-        XCODE_PROJECT: "SwissBitcoinPay.xcodeproj"
-        XCODE_SCHEME: "SwissBitcoinPay"
-        APP_ID: 6444370155
+        BUNDLE_ID: "org.boltcardtools.terminal"
+        XCODE_WORKSPACE: "BoltcardToolsTerminal.xcworkspace"
+        XCODE_PROJECT: "BoltcardToolsTerminal.xcodeproj"
+        XCODE_SCHEME: "BoltcardToolsTerminal"
+        APP_ID: 6475311437
       java: 20
     scripts:
       - name: Save DEV variable
@@ -101,7 +105,11 @@ workflows:
       - name: Publishing to Testfairy
         script: |
           zip -r ios_symbols.zip ios/*.xcarchive/dSYMs/*.dSYM
-          ./scripts/upload-to-testfairy.sh ios/export/SwissBitcoinPay.ipa ios_symbols.zip
+          ./scripts/upload-to-testfairy.sh ios/export/BoltcardToolsTerminal.ipa ios_symbols.zip
+    cache:
+      cache_paths:
+        - $CM_BUILD_DIR/node_modules
+        - $HOME/Library/Caches/CocoaPods
     publishing:
       email:
         recipients:

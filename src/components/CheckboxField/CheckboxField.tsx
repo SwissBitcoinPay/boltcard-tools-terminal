@@ -42,8 +42,9 @@ export const CheckboxField = ({
         style={{
           margin: isNative ? -6 : 0
         }}
+        onValueChange={onChangeHandler}
       />
-      <S.LabelText weight={600} h5>
+      <S.LabelText weight={600} h4>
         {label}
       </S.LabelText>
     </S.PressableContainer>

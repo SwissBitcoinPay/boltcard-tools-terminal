@@ -23,7 +23,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'SwissBitcoinPay' do
+target 'BoltcardToolsTerminal' do
   config = use_native_modules!
 
   use_react_native!(
@@ -39,7 +39,7 @@ target 'SwissBitcoinPay' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'SwissBitcoinPayTests' do
+  target 'BoltcardToolsTerminalTests' do
     inherit! :complete
     # Pods for testing
   end

@@ -18,7 +18,7 @@ import {
   faQrcode,
   faTrash
 } from "@fortawesome/free-solid-svg-icons";
-import { SBPContext } from "@config";
+import { Context } from "@config";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
 
@@ -64,7 +64,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
     ref
   ) => {
     const { colors } = useTheme();
-    const { isCameraAvailable } = useContext(SBPContext);
+    const { isCameraAvailable } = useContext(Context);
 
     const [isFocused, setIsFocused] = useState(props.autoFocus);
 

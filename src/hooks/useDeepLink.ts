@@ -1,39 +1,27 @@
 import { useCallback, useEffect } from "react";
-import { useNavigate } from "@components/Router";
 import { Deeplink } from "@utils";
-import { appRootUrl } from "@config";
+import { useInvoiceHandler } from "./useInvoiceHandler";
 
 export const useDeepLink = () => {
-  const navigate = useNavigate();
+  const { invoiceHandler } = useInvoiceHandler();
 
-  const handleDeepLinking = useCallback(async () => {
-    const deepLinkHandler = (url: string) => {
-      const arr = url.replace(`${appRootUrl}/`, "").split("/");
-      const route = arr[0];
-
-      if (route === "connect") {
-        navigate("/", { state: { qrValue: url } });
-      } else {
-        navigate(`/${arr.join("/")}`);
-      }
-    };
-
-    const deepLinkListener = Deeplink.addEventListener("url", (e) => {
-      deepLinkHandler(e.url);
-    });
-
+  const handleInitialDeepLinking = useCallback(async () => {
     const url = await Deeplink.getInitialURL();
 
     if (url) {
-      deepLinkHandler(url);
+      invoiceHandler(url);
     }
-
-    return () => deepLinkListener.remove();
-  }, [navigate]);
+  }, [invoiceHandler]);
 
   useEffect(() => {
-    void handleDeepLinking();
-  }, []);
+    void handleInitialDeepLinking();
 
-  return null;
+    const deepLinkListener = Deeplink.addEventListener("url", (e) => {
+      invoiceHandler(e.url);
+    });
+
+    return () => deepLinkListener.remove();
+  }, [invoiceHandler, handleInitialDeepLinking]);
+
+  return { invoiceHandler };
 };

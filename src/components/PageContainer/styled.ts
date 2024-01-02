@@ -10,6 +10,7 @@ const PAGE_PADDING_VERTICAL = 24;
 type AttrsProps = {
   isLarge?: boolean;
   isStrictTopMargin?: boolean;
+  isContentVerticallyCentered?: boolean;
   noBottomMargin?: boolean;
   noPadding?: boolean;
   noVerticalPadding?: boolean;
@@ -23,6 +24,7 @@ export const StyledPageContainer = styled(ScrollView).attrs<AttrsProps>(
     theme,
     isLarge,
     isStrictTopMargin,
+    isContentVerticallyCentered,
     noBottomMargin,
     noPadding,
     noVerticalPadding,
@@ -34,7 +36,7 @@ export const StyledPageContainer = styled(ScrollView).attrs<AttrsProps>(
     contentContainerStyle: {
       position: "relative",
       alignItems: "center",
-      justifyContent: "flex-start",
+      justifyContent: !isContentVerticallyCentered ? "flex-start" : "center",
       flexGrow: 1,
       paddingVertical:
         !isStrictTopMargin && ((!noVerticalPadding && !noPadding) || isLarge)
