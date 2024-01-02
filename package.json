@@ -182,7 +182,7 @@
     "node-loader": "2.0.0",
     "os-browserify": "0.3.0",
     "path-browserify": "1.0.1",
-    "prettier": "3.0.3",
+    "prettier": "3.1.1",
     "process": "0.11.10",
     "rn-nodeify": "10.3.0",
     "stream-http": "3.2.0",
