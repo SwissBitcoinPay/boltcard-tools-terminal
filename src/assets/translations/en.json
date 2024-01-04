@@ -1,0 +1,59 @@
+{
+  "common": {
+    "login": "Login",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "paid": "Paid",
+    "pending": "Pending",
+    "expired": "Expired",
+    "inProgress": "In progress",
+    "edit": "Edit",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "wallet": "Wallet",
+    "admin": "Admin",
+    "employee": "Employee",
+    "notSet": "Not set",
+    "months": "months",
+    "weeks": "weeks",
+    "days": "days",
+    "hours": "hours",
+    "version": "Version {{tag}}",
+    "errors": {
+      "invalidBitcoinAddress": "Invalid bitcoin address",
+      "invalidLightningTag": "Invalid Lightning tag",
+      "unableGetRates": "Unable to get rates",
+      "unknown": "Unknown error"
+    }
+  },
+  "screens": {
+    "home": {
+      "intro": "This app is a simple utility tool to help you paying Lightning invoices on devices/platforms that do not directly support BoltCards, such as websites, custom machines, and others.",
+      "scanInvoice": "Scan invoice",
+      "nfcNotSupported": "NFC not supported",
+      "moreAboutBoltCard": "More about BoltCard",
+      "builtBy": "Built by"
+    },
+    "invoice": {
+      "tapYourBoltCard": "Tap your Bolt Card",
+      "network": "Network",
+      "label": "Label",
+      "message": "Message",
+      "invoiceAmount": "Invoice amount",
+      "fees": "Fees",
+      "requestSwap": "Request swap",
+      "nextBatch": "Next batch",
+      "scheduledSwapIntro": "This invoice is Onchain only.\nTo pay it seamlessly with your Bolt Card, Swiss Bitcoin Pay provide a cheap swap service (0.21% fee + miner fee).\n\nIf you schedule the sats to be sent with our next batch, miner fee will be free for you.",
+      "amountReceived": "Amount received",
+      "amountToPay": "Amount to pay",
+      "scheduleForNextBatch": "Schedule for next batch (no miner fees)",
+      "startScanning": "Start scanning",
+      "payingInvoice": "Paying invoice",
+      "paid": "Paid",
+      "returnToHome": "Return to Home"
+    }
+  },
+  "errors": {
+    "invalidInvoice": "Invalid Bitcoin/Lightning invoice"
+  }
+}
