@@ -26,7 +26,7 @@ export const useInvoiceHandler = () => {
       let label: string | undefined;
       let message: string | undefined;
 
-      if (value.toLowerCase().startsWith("lnurl")) {
+      if (value.toLowerCase().startsWith("lnbc")) {
         lightningInvoice = value.toLowerCase();
       } else {
         const parsedValue = qs.parse(
