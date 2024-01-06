@@ -148,25 +148,27 @@ export const Invoice = () => {
 
   return (
     <S.InvoicePageContainer
-      {...(!decodedInvoice
-        ? {
-            footerButton: {
-              type: "bitcoin",
-              title: t("requestSwap"),
-              onPress: onGetSwapQuote,
-              isLoading: isSwapLoading
-            }
-          }
-        : isNfcNeedsTap && lightningInvoice
-        ? {
-            footerButton: {
-              type: "bitcoin",
-              title: t("startScanning"),
-              onPress: () => {
-                void readingNfcLoop(lightningInvoice);
+      {...(!isNfcActionSuccess
+        ? !decodedInvoice
+          ? {
+              footerButton: {
+                type: "bitcoin",
+                title: t("requestSwap"),
+                onPress: onGetSwapQuote,
+                isLoading: isSwapLoading
               }
             }
-          }
+          : isNfcNeedsTap && lightningInvoice
+          ? {
+              footerButton: {
+                type: "bitcoin",
+                title: t("startScanning"),
+                onPress: () => {
+                  void readingNfcLoop(lightningInvoice);
+                }
+              }
+            }
+          : {}
         : {})}
       isContentVerticallyCentered={isNfcActionSuccess}
     >
