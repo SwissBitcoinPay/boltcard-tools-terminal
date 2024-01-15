@@ -52,7 +52,7 @@
     "email-validator": "2.0.4",
     "i18next": "23.5.1",
     "i18next-browser-languagedetector": "7.1.0",
-    "ibantools": "4.3.4",
+    "ibantools": "4.3.9",
     "is-valid-zipcode": "1.0.3",
     "js-crypto-hmac": "1.0.7",
     "js-encoding-utils": "0.7.3",
