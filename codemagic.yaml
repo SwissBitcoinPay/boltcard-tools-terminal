@@ -16,7 +16,7 @@ workflows:
       vars:
         PACKAGE_NAME: "org.boltcardtools.terminal"
         SKIP_BUNDLING: 1
-      java: 21.0.1
+      java: 17.0.9
     scripts:
       - name: Save DEV variable
         script: |
@@ -79,7 +79,7 @@ workflows:
         XCODE_PROJECT: "BoltcardToolsTerminal.xcodeproj"
         XCODE_SCHEME: "BoltcardToolsTerminal"
         APP_ID: 6475311437
-      java: 21.0.1
+      java: 17.0.9
     scripts:
       - name: Save DEV variable
         script: |
