@@ -84,7 +84,8 @@ export const Pressable = forwardRef<TouchableOpacity, PressableProps>(
             {props.children}
           </Link>
         ) : isAndroid ? (
-          <RootPressable {...props} onPress={onPress} />
+          // @ts-ignore
+          <RootPressable ref={ref} {...props} onPress={onPress} />
         ) : (
           <TouchableOpacity
             ref={ref}

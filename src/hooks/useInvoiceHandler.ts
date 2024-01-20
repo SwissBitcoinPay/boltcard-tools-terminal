@@ -1,17 +1,8 @@
 import { useCallback } from "react";
 import { useNavigate } from "@components/Router";
-import qs from "query-string";
 import { useToast } from "react-native-toast-notifications";
-import { validateBitcoinAddress } from "@utils";
+import { getBitcoinInvoiceData } from "@utils";
 import { useTranslation } from "react-i18next";
-
-type InvoiceType = {
-  bitcoin?: string;
-  lightning?: string;
-  amount?: string;
-  label?: string;
-  message?: string;
-};
 
 export const useInvoiceHandler = () => {
   const navigate = useNavigate();
@@ -20,35 +11,16 @@ export const useInvoiceHandler = () => {
 
   const invoiceHandler = useCallback(
     (value: string) => {
-      let lightningInvoice: string | undefined;
-      let bitcoinAddress: string | undefined;
-      let amount: number | undefined;
-      let label: string | undefined;
-      let message: string | undefined;
+      const {
+        lightningInvoice,
+        bitcoinAddress,
+        amount,
+        label,
+        message,
+        isValid
+      } = getBitcoinInvoiceData(value);
 
-      if (value.toLowerCase().startsWith("lnbc")) {
-        lightningInvoice = value.toLowerCase();
-      } else {
-        const parsedValue = qs.parse(
-          value
-            .replace(/lightning:/i, "lightning=")
-            .replace(/bitcoin:/i, "bitcoin=")
-            .replace("?", "&"),
-          { parseNumbers: true }
-        ) as InvoiceType;
-        lightningInvoice = parsedValue.lightning;
-        bitcoinAddress = parsedValue.bitcoin;
-        amount = parsedValue.amount
-          ? parseInt((parseFloat(parsedValue.amount) * 1000000000).toString())
-          : undefined;
-        label = parsedValue.label;
-        message = parsedValue.message;
-      }
-
-      if (
-        lightningInvoice ||
-        (validateBitcoinAddress(bitcoinAddress || "") && amount)
-      ) {
+      if (isValid) {
         navigate(`/invoice`, {
           state: {
             ...(lightningInvoice

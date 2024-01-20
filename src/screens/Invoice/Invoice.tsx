@@ -105,7 +105,7 @@ export const Invoice = () => {
   useEffect(() => {
     if (isNfcActionSuccess) {
       Vibration.vibrate(50);
-      setBackgroundColor(colors.success, 1000);
+      setBackgroundColor(colors.success, 500);
     }
   }, [isNfcActionSuccess]);
 

@@ -8,6 +8,7 @@ export { getFormattedUnit } from "./getFormattedUnit";
 export { getSha256 } from "./getSha256";
 export { isApiError } from "./isApiError";
 export { isIcon } from "./isIcon";
+export { getBitcoinInvoiceData } from "./getBitcoinInvoiceData";
 export { interpolateColors } from "./interpolateColors";
 export { tupulize } from "./tupulize";
 export { getRandomNumber } from "./getRandomNumber";
