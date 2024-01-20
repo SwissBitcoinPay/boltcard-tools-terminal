@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Camera,
+  CodeScanner,
   useCameraDevices,
-  useCodeScanner,
-  CodeScanner
+  useCodeScanner
 } from "react-native-vision-camera";
-import { Loader, View } from "@components";
 import { QRScannerProps } from "./QRCamera";
 import { StyleSheet } from "react-native";
+import { Loader } from "@components/Loader";
 import * as S from "./styled";
 
 export const QRCamera = ({
@@ -33,6 +33,7 @@ export const QRCamera = ({
 
   useEffect(() => {
     setConfig({
+      isActive: true,
       hasTorch: device?.hasTorch || false,
       defaultIndex: devices.findIndex((d) => d.position === "back"),
       devicesNumber: devices.length
@@ -61,24 +62,20 @@ export const QRCamera = ({
   });
 
   return !!device && !isLoading ? (
-    isActive ? (
-      <S.Camera
-        isActive
-        key={device.id}
-        device={device}
-        torch={isTorchOn ? "on" : "off"}
-        codeScanner={codeScanner}
-        style={StyleSheet.flatten([
-          style,
-          {
-            height: videoHeight as number
-          }
-        ])}
-        resizeMode={resizeMode}
-      />
-    ) : (
-      <View style={{ height: videoHeight as number }} />
-    )
+    <S.Camera
+      isActive={isActive}
+      key={device.id}
+      device={device}
+      torch={isTorchOn ? "on" : "off"}
+      codeScanner={codeScanner}
+      style={StyleSheet.flatten([
+        style,
+        {
+          height: videoHeight as number
+        }
+      ])}
+      resizeMode={resizeMode}
+    />
   ) : (
     <Loader />
   );
