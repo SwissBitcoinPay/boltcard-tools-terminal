@@ -73,13 +73,26 @@ export const QRScanner = () => {
     [windowHeight, insets.top, insets.bottom, holeSize]
   );
 
+  const onScan = useCallback(
+    (value: string) => {
+      if (config?.isActive) {
+        _setConfig({ isActive: false });
+        setTimeout(() => {
+          invoiceHandler(value);
+        }, 0);
+      }
+    },
+    [_setConfig, config?.isActive, invoiceHandler]
+  );
+
   return (
     <>
       <S.Camera
         deviceIndex={deviceIndex}
         isTorchOn={isTorchOn}
+        isActive={config?.isActive}
         setConfig={_setConfig}
-        onScan={invoiceHandler}
+        onScan={onScan}
         videoHeight={isLarge ? windowHeight - 260 : "100%"}
       />
       {!isCameraLoading && placeholderPreset && (
