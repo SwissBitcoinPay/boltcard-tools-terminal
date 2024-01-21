@@ -19,10 +19,8 @@ const babelLoaderConfiguration = {
       __dirname,
       "node_modules/react-native-animated-linear-gradient"
     ),
-    path.resolve(__dirname, "node_modules/@react-native-community/slider"),
     path.resolve(__dirname, "node_modules/react-native-keychain"),
     path.resolve(__dirname, "node_modules/@dotlottie"),
-    // path.resolve(__dirname, "node_modules/lottie-react-native"),
     path.resolve(__dirname, "node_modules/react-native-progress")
   ],
   exclude: [/\.native.[jt]sx$/, /\.ios.[jt]sx$/, /\.android.[jt]sx$/],
