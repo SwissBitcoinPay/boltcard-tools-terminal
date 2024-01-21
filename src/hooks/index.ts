@@ -1,5 +1,6 @@
 export { useSafeAreaInsets } from "./useSafeAreaInsets";
 export { useInvoiceHandler } from "./useInvoiceHandler";
+export { useInitialClipboard } from "./useInitialClipboard";
 export { useDeepLink } from "./useDeepLink";
 export { useSplashScreen } from "./useSplashScreen";
 export { useBackHandler } from "./useBackHandler";

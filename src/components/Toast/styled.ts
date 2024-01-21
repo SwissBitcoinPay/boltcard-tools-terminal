@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { ComponentStack, Icon, Text } from "@components";
 import { ToastProps } from "react-native-toast-notifications/lib/typescript/toast";
+import { Bar } from "react-native-progress";
 
 export const ToastContainer = styled(ComponentStack)<Pick<ToastProps, "type">>`
+  overflow: hidden;
+  max-width: 95%;
   ${({ theme, type }) => `
     border-radius: ${theme.borderRadius}px;
     margin: ${theme.gridSize / 2.5}px 0px;
@@ -17,7 +20,7 @@ export const ToastContainer = styled(ComponentStack)<Pick<ToastProps, "type">>`
           return theme.colors.error;
       }
     })()};
-      `}
+  `}
 `;
 
 export const ToastText = styled(Text).attrs(({ theme }) => ({
@@ -28,4 +31,9 @@ export const ToastText = styled(Text).attrs(({ theme }) => ({
 
 export const ToastIcon = styled(Icon)`
   color: ${({ theme }) => theme.colors.white};
+`;
+
+export const DurationBar = styled(Bar)`
+  position: absolute;
+  bottom: 0px;
 `;

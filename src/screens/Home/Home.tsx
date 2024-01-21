@@ -6,7 +6,7 @@ import { faCamera, faXmark } from "@fortawesome/free-solid-svg-icons";
 import AnimatedLinearGradient from "react-native-animated-linear-gradient";
 import { colors } from "./gradient-config";
 import { PlaceholderPresets } from "@components/QRCamera/data";
-import { useVersionTag } from "@hooks";
+import { useInitialClipboard, useVersionTag } from "@hooks";
 import { platform } from "@config";
 import * as S from "./styled";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 const { getIsNfcSupported } = platform;
 
 export const Home = () => {
+  useInitialClipboard();
   const { t } = useTranslation(undefined, { keyPrefix: "screens.home" });
   const navigate = useNavigate();
   const versionTag = useVersionTag();

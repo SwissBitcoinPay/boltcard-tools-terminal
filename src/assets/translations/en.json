@@ -32,7 +32,8 @@
       "scanInvoice": "Scan invoice",
       "nfcNotSupported": "NFC not supported",
       "moreAboutBoltCard": "More about BoltCard",
-      "builtBy": "Built by"
+      "builtBy": "Built by",
+      "foundInvoiceClipboard": "Tap to read invoice from your clipboard"
     },
     "invoice": {
       "tapYourBoltCard": "Tap your Bolt Card",
