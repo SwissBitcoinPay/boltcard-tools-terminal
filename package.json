@@ -153,7 +153,7 @@
     "@types/react-native-svg-animated-linear-gradient": "0.4.1",
     "@types/react-test-renderer": "18.0.3",
     "@types/styled-components": "5.1.28",
-    "@typescript-eslint/eslint-plugin": "6.7.3",
+    "@typescript-eslint/eslint-plugin": "6.19.0",
     "@typescript-eslint/parser": "6.7.3",
     "assert": "1.5.1",
     "babel-jest": "29.7.0",
