@@ -29,7 +29,7 @@ export const getBitcoinInvoiceData = (value: string) => {
     lightningInvoice = parsedValue.lightning;
     bitcoinAddress = parsedValue.bitcoin;
     amount = parsedValue.amount
-      ? parseInt((parseFloat(parsedValue.amount) * 1000000000).toString())
+      ? Math.round(parseFloat(parsedValue.amount) * 100000000)
       : undefined;
     label = parsedValue.label;
     message = parsedValue.message;
