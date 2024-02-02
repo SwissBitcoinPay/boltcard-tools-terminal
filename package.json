@@ -22,7 +22,7 @@
     "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@fortawesome/react-native-fontawesome": "0.3.0",
-    "@os-team/i18next-react-native-language-detector": "1.0.29",
+    "@os-team/i18next-react-native-language-detector": "1.0.31",
     "@react-native-clipboard/clipboard": "1.13.2",
     "@react-native-community/checkbox": "0.5.16",
     "@react-native-picker/picker": "2.6.1",
