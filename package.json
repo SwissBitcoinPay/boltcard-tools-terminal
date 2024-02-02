@@ -24,7 +24,7 @@
     "@fortawesome/react-native-fontawesome": "0.3.0",
     "@os-team/i18next-react-native-language-detector": "1.0.29",
     "@react-native-clipboard/clipboard": "1.13.2",
-    "@react-native-community/checkbox": "0.5.16",
+    "@react-native-community/checkbox": "0.5.17",
     "@react-native-picker/picker": "2.6.1",
     "@react-spring/native": "9.7.3",
     "@react-spring/web": "9.7.3",
