@@ -62,6 +62,7 @@ export const ThemeContextProvider = ({ children }: PropsWithChildren) => {
       }}
     >
       <ThemeProvider theme={currentTheme}>
+        {/* @ts-ignore */}
         <ToastProvider offsetBottom={bottom} renderToast={Toast}>
           <animated.View
             style={{

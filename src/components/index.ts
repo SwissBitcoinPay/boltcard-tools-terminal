@@ -8,7 +8,7 @@ export { Pressable } from "./Pressable";
 export { Url } from "./Url";
 export { ComponentStack } from "./ComponentStack";
 export { Toast } from "./Toast";
-export { ProgressBar } from "./ProgressBar";
+export { QR } from "./QR";
 export { Callout } from "./Callout";
 export { Dot } from "./Dot";
 export { Dots } from "./Dots";

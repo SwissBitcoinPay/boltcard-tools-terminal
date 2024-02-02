@@ -1,12 +1,6 @@
-import {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 import { TextInput } from "react-native";
-import { BaseField, QrScanModal, QrModal, Text } from "@components";
+import { BaseField, Text } from "@components";
 import { BaseFieldProps } from "@components/BaseField";
 import { StyledComponentComponentProps } from "@types";
 import { Clipboard, tupulize } from "@utils";
@@ -18,7 +12,6 @@ import {
   faQrcode,
   faTrash
 } from "@fortawesome/free-solid-svg-icons";
-import { Context } from "@config";
 import { useTheme } from "styled-components";
 import * as S from "./styled";
 
@@ -52,7 +45,6 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       copyable,
       pastable,
       qrDisplayable,
-      qrDisplayValue,
       qrScannable,
       deletable,
       suggestions,
@@ -64,7 +56,6 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
     ref
   ) => {
     const { colors } = useTheme();
-    const { isCameraAvailable } = useContext(Context);
 
     const [isFocused, setIsFocused] = useState(props.autoFocus);
 
@@ -119,13 +110,6 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
       setIsScanModalOpen(!isScanModalOpen);
     }, [isScanModalOpen]);
 
-    const onScanQr = useCallback(
-      (qrValue: string) => {
-        onChangeText?.(qrValue);
-      },
-      [onChangeText]
-    );
-
     const onToggleQrDisplayModal = useCallback(() => {
       setIsQrDisplayModalOpen(!isQrDisplayModalOpen);
     }, [isQrDisplayModalOpen]);
@@ -143,24 +127,6 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
 
     return (
       <S.TextFieldContainer style={style}>
-        {isCameraAvailable && qrScannable && (
-          <QrScanModal
-            title={label}
-            isOpen={isScanModalOpen}
-            onClose={onToggleScanQrModal}
-            onScan={onScanQr}
-          />
-        )}
-        {qrDisplayable && (
-          <QrModal
-            title={label}
-            isOpen={isQrDisplayModalOpen}
-            onClose={onToggleQrDisplayModal}
-            qrProps={{
-              data: qrDisplayValue || value
-            }}
-          />
-        )}
         <BaseField
           value={!!value}
           label={label !== undefined ? label : ""}
@@ -169,7 +135,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(
           left={left}
           right={[
             ...(right ? tupulize(right) : []),
-            ...(qrScannable && isCameraAvailable
+            ...(qrScannable
               ? [{ icon: faCamera, onPress: onToggleScanQrModal }]
               : []),
             ...(qrDisplayable
