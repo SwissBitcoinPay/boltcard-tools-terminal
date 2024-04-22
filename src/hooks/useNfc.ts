@@ -17,6 +17,8 @@ export const useNfc = () => {
   const [isNfcNeedsTap, setIsNfcNeedsTap] = useState(false);
   const [isNfcNeedsPermission, setIsNfcNeedsPermission] = useState(false);
   const [isNfcActionSuccess, setIsNfcActionSuccess] = useState(false);
+  const [isPinRequired, setIsPinRequired] = useState(false);
+  const [isPinConfirmed, setIsPinConfirmed] = useState(false);
 
   const setupNfc = useCallback(async () => {
     if (await getIsNfcSupported()) {
@@ -49,7 +51,7 @@ export const useNfc = () => {
   }, []);
 
   const readingNfcLoop = useCallback(
-    async (pr: string) => {
+    async (pr: string, amount: number, getPin) => {
       setIsNfcActionSuccess(false);
       await NFC.stopRead();
 
@@ -114,7 +116,22 @@ export const useNfc = () => {
               tag: "withdrawRequest";
               callback: string;
               k1: string;
+              pinLimit: number;
             }>(cardData);
+
+            let pin = "";
+            if (cardDataResponse.pinLimit) {
+              //if the card has pin enabled
+              //check the amount didn't exceed the limit
+              const limitSat = cardDataResponse.pinLimit;
+              if (limitSat <= amount) {
+                setIsPinRequired(true);
+                pin = await getPin();
+                setIsPinConfirmed(true);
+              }
+            } else {
+                setIsPinRequired(false);
+            }
 
             const { data: callbackResponseData } = await axios.get<{
               reason: { detail: string };
@@ -122,7 +139,8 @@ export const useNfc = () => {
             }>(cardDataResponse.callback, {
               params: {
                 k1: cardDataResponse.k1,
-                pr
+                pr,
+                pin
               }
             });
 
@@ -233,6 +251,8 @@ export const useNfc = () => {
     isNfcNeedsTap,
     isNfcNeedsPermission,
     isNfcActionSuccess,
+    isPinRequired,
+    isPinConfirmed,
     setupNfc,
     stopNfc,
     readingNfcLoop
