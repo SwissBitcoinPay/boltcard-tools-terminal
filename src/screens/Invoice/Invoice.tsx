@@ -22,7 +22,7 @@ import {
 import addDays from "date-fns/addDays";
 import intlFormat from "date-fns/intlFormat";
 import bolt11, { PaymentRequestObject } from "bolt11";
-import { useNfc, usePin } from "@hooks";
+import { useNfc } from "@hooks";
 import { XOR } from "ts-essentials";
 import { ThemeContext } from "@config";
 import { useCallback, useContext, useEffect, useMemo, useState, useRef } from "react";
@@ -68,7 +68,8 @@ export const Invoice = () => {
     isNfcNeedsTap,
     isNfcActionSuccess,
     isPinRequired,
-    isPinConfirmed
+    isPinConfirmed,
+    setPin
   } = useNfc();
 
   const {
@@ -92,8 +93,6 @@ export const Invoice = () => {
   const [decodedInvoice, setDecodedInvoice] = useState<PaymentRequestObject>();
 
   const { satoshis } = decodedInvoice || {};
-
-  const [getPin, onConfirm] = usePin()
 
   const pinView = useRef(null)
   const [showRemoveButton, setShowRemoveButton] = useState(false)
@@ -125,7 +124,7 @@ export const Invoice = () => {
 
   useEffect(() => {
     if (isNfcAvailable && !isNfcNeedsTap && lightningInvoice) {
-      void readingNfcLoop(lightningInvoice, satoshis, getPin);
+      void readingNfcLoop(lightningInvoice, satoshis);
     }
   }, [readingNfcLoop, isNfcAvailable, isNfcNeedsTap, lightningInvoice, satoshis]);
 
@@ -353,7 +352,7 @@ export const Invoice = () => {
                       pinView.current.clear()
                     }
                     if (key === "custom_right") {
-                      onConfirm(enteredPin)
+                      setPin(enteredPin)
                     }
                   }}
                   customLeftButton={showRemoveButton ? <Icon icon={faDeleteLeft} size={36} color={"#FFF"} /> : null}

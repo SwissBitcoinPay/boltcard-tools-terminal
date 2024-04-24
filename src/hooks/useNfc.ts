@@ -20,6 +20,25 @@ export const useNfc = () => {
   const [isPinRequired, setIsPinRequired] = useState(false);
   const [isPinConfirmed, setIsPinConfirmed] = useState(false);
 
+  const [ pinResolver, setPinResolver ] = useState({ resolve: null })
+
+  const pinInputPromise = () => {
+      let pinResolver;
+      return [ new Promise(( resolve, reject ) => {
+          pinResolver = resolve
+      }), pinResolver]
+  }
+
+  const getPin = async () => {
+        const [ promise, resolve ] = await pinInputPromise()
+        setPinResolver({ resolve })
+        return promise;
+  }
+
+  const setPin = async(pin) => {
+        pinResolver.resolve(pin);
+  }
+
   const setupNfc = useCallback(async () => {
     if (await getIsNfcSupported()) {
       try {
@@ -51,7 +70,7 @@ export const useNfc = () => {
   }, []);
 
   const readingNfcLoop = useCallback(
-    async (pr: string, amount: number, getPin) => {
+    async (pr: string, amount: number) => {
       setIsNfcActionSuccess(false);
       await NFC.stopRead();
 
@@ -253,6 +272,7 @@ export const useNfc = () => {
     isNfcActionSuccess,
     isPinRequired,
     isPinConfirmed,
+    setPin,
     setupNfc,
     stopNfc,
     readingNfcLoop
