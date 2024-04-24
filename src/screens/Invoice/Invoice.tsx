@@ -33,9 +33,7 @@ import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 import * as S from "./styled";
 
-import { ImageBackground, SafeAreaView, StatusBar } from "react-native";
-import ReactNativePinView from "react-native-pin-view";
-import { faDeleteLeft, faUnlock } from "@fortawesome/free-solid-svg-icons";
+import { PinPad } from "../PinPad";
 
 const numberWithSpaces = (nb: number) =>
   nb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -93,24 +91,6 @@ export const Invoice = () => {
   const [decodedInvoice, setDecodedInvoice] = useState<PaymentRequestObject>();
 
   const { satoshis } = decodedInvoice || {};
-
-  const pinView = useRef(null)
-  const [showRemoveButton, setShowRemoveButton] = useState(false)
-  const [enteredPin, setEnteredPin] = useState("")
-  const [showCompletedButton, setShowCompletedButton] = useState(false)
-
-  useEffect(() => {
-    if (enteredPin.length > 0) {
-      setShowRemoveButton(true)
-    } else {
-      setShowRemoveButton(false)
-    }
-    if (enteredPin.length === 4) {
-      setShowCompletedButton(true)
-    } else {
-      setShowCompletedButton(false)
-    }
-  }, [enteredPin])
 
   useEffect(() => {
     void setupNfc();
@@ -307,59 +287,7 @@ export const Invoice = () => {
           />
         </S.SuccessComponentStack>
       ) : isPinRequired && !isPinConfirmed ? (
-        <>
-            <StatusBar barStyle="light-content" />
-              <SafeAreaView
-                style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" }}>
-                <Text
-                  style={{
-                    paddingTop: 24,
-                    paddingBottom: 48,
-                    color: "rgba(255,255,255,0.7)",
-                    fontSize: 48,
-                  }}>
-                  Boltcard PIN
-                </Text>
-                <ReactNativePinView
-                  inputSize={32}
-                  ref={pinView}
-                  pinLength={4}
-                  buttonSize={60}
-                  onValueChange={value => setEnteredPin(value)}
-                  buttonAreaStyle={{
-                    marginTop: 24,
-                  }}
-                  inputAreaStyle={{
-                    marginBottom: 24,
-                  }}
-                  inputViewEmptyStyle={{
-                    backgroundColor: "transparent",
-                    borderWidth: 1,
-                    borderColor: "#FFF",
-                  }}
-                  inputViewFilledStyle={{
-                    backgroundColor: "#FFF",
-                  }}
-                  buttonViewStyle={{
-                    borderWidth: 1,
-                    borderColor: "#FFF",
-                  }}
-                  buttonTextStyle={{
-                    color: "#FFF",
-                  }}
-                  onButtonPress={key => {
-                    if (key === "custom_left") {
-                      pinView.current.clear()
-                    }
-                    if (key === "custom_right") {
-                      setPin(enteredPin)
-                    }
-                  }}
-                  customLeftButton={showRemoveButton ? <Icon icon={faDeleteLeft} size={36} color={"#FFF"} /> : null}
-                  customRightButton={showCompletedButton ? <Icon icon={faUnlock} size={36} color={"#FFF"} /> : null}
-                />
-              </SafeAreaView>
-          </>
+            <PinPad newPin={setPin}/>
       ) : isNfcLoading || isNfcScanning ? (
         <Loader
           reason={t(isNfcLoading ? "payingInvoice" : "tapYourBoltCard")}
