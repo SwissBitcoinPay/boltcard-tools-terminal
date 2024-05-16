@@ -87,6 +87,7 @@ export const Invoice = () => {
 
   const [isScheduledSwap, setIsScheduledSwap] = useState(false);
   const [isSwapLoading, setIsSwapLoading] = useState<boolean>();
+  const [isPinVisible, setIsPinVisible] = useState(true);
   const [swapFees, setSwapFees] = useState<number>();
   const [decodedInvoice, setDecodedInvoice] = useState<PaymentRequestObject>();
 
@@ -114,6 +115,10 @@ export const Invoice = () => {
       setBackgroundColor(colors.success, 500);
     }
   }, [isNfcActionSuccess]);
+
+  useEffect(() => {
+     setIsPinVisible(true)
+  }, [isPinRequired, isPinConfirmed]);
 
   const onGetSwapQuote = useCallback(async () => {
     if (amount) {
