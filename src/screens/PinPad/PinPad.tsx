@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { SafeAreaView, StatusBar, View } from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import ReactNativePinView from "react-native-pin-view";
 import BottomDrawer, {
   BottomDrawerMethods,
@@ -12,8 +12,33 @@ export const PinPad = (props) => {
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
   const [showRemoveButton, setShowRemoveButton] = useState(false);
   const [enteredPin, setEnteredPin] = useState("");
+  const [buttonPressed, setButtonPressed] = useState("");
   const [showCompletedButton, setShowCompletedButton] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+
+  const styles = StyleSheet.create({
+    container: {
+        backgroundColor:  "rgba(0,0,0,0.5)",
+    },
+    handleContainer: {
+      backgroundColor:  "transparent",
+    },
+    pinPad: {
+      backgroundColor: "transparent",
+      alignItems: "center",
+      flex: 1,
+    },
+    pinPadTitle: {
+      paddingTop: 48,
+      paddingBottom: 24,
+      color: "rgba(255,255,255,1)",
+      fontSize: 48,
+    },
+    whiteBorder: {
+      borderWidth: 1,
+      borderColor: "#FFF",
+    },
+  });
 
   useEffect(() => {
     if(isVisible) {
@@ -36,6 +61,15 @@ export const PinPad = (props) => {
     }
   }, [enteredPin]);
 
+  useEffect(() => {
+      if (buttonPressed === "custom_left") {
+        pinView.current.clearAll()
+      }
+      if (buttonPressed === "custom_right") {
+        props.newPin(enteredPin)
+      }
+  }, [buttonPressed])
+
   const onClose = useCallback(() => {
       setIsVisible(false);
     }, []);
@@ -46,17 +80,14 @@ export const PinPad = (props) => {
             ref={bottomDrawerRef}
             openOnMount gestureMode={"none"}
             closeOnBackdropPress={false}
-            initialHeight={500}
+            initialHeight={535}
             backdropOpacity={0}
+            customStyles={styles}
         >
             <View
-              style={{ backgroundColor: "rgba(0,0,0,0.9)",  alignItems: "center", flex: 1  }}>
+              style={styles.pinPad}>
               <Text
-                style={{
-                  paddingTop: 48,
-                  color: "rgba(255,255,255,0.7)",
-                  fontSize: 48,
-                }}>
+                style={styles.pinPadTitle}>
                 Boltcard PIN
               </Text>
               <ReactNativePinView
@@ -65,35 +96,13 @@ export const PinPad = (props) => {
                 pinLength={4}
                 buttonSize={60}
                 onValueChange={value => setEnteredPin(value)}
-                buttonAreaStyle={{
-                  marginTop: 24,
-                }}
-                inputAreaStyle={{
-                  marginBottom: 24,
-                }}
-                inputViewEmptyStyle={{
-                  backgroundColor: "transparent",
-                  borderWidth: 1,
-                  borderColor: "#FFF",
-                }}
-                inputViewFilledStyle={{
-                  backgroundColor: "#FFF",
-                }}
-                buttonViewStyle={{
-                  borderWidth: 1,
-                  borderColor: "#FFF",
-                }}
-                buttonTextStyle={{
-                  color: "#FFF",
-                }}
-                onButtonPress={key => {
-                  if (key === "custom_left") {
-                    pinView.current.clear()
-                  }
-                  if (key === "custom_right") {
-                    props.newPin(enteredPin)
-                  }
-                }}
+                buttonAreaStyle={{ marginTop: 24 }}
+                inputAreaStyle={{ marginBottom: 24 }}
+                inputViewEmptyStyle={[{ backgroundColor: "transparent" }, styles.whiteBorder]}
+                inputViewFilledStyle={{ backgroundColor: "#FFF" }}
+                buttonViewStyle={styles.whiteBorder}
+                buttonTextStyle={{ color: "#FFF" }}
+                onButtonPress={key => setButtonPressed(key)}
                 customLeftButton={showRemoveButton ? <Icon icon={faDeleteLeft} size={36} color={"#FFF"} /> : null}
                 customRightButton={showCompletedButton ? <Icon icon={faUnlock} size={36} color={"#FFF"} /> : null}
               />

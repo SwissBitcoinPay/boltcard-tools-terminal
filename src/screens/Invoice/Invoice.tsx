@@ -6,8 +6,7 @@ import {
   CheckboxField,
   ComponentStack,
   Loader,
-  Text,
-  Icon
+  Text
 } from "@components";
 import {
   faBolt,
@@ -25,7 +24,7 @@ import bolt11, { PaymentRequestObject } from "bolt11";
 import { useNfc } from "@hooks";
 import { XOR } from "ts-essentials";
 import { ThemeContext } from "@config";
-import { useCallback, useContext, useEffect, useMemo, useState, useRef } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Vibration } from "react-native";
 import { useTheme } from "styled-components";
 import { ListItem } from "@components/ItemsList/components/ListItem";
