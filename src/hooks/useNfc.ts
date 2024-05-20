@@ -139,7 +139,7 @@ export const useNfc = () => {
             }>(cardData);
 
             let pin = "";
-            if (cardDataResponse.pinLimit) {
+            if (cardDataResponse.pinLimit !== undefined) {
               //if the card has pin enabled
               //check the amount didn't exceed the limit
               const limitSat = cardDataResponse.pinLimit;
