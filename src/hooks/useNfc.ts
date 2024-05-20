@@ -94,7 +94,7 @@ export const useNfc = () => {
           });
 
           if (!isIos) {
-            readingNfcLoop(pr);
+            readingNfcLoop(pr, amount);
           } else {
             setIsNfcAvailable(false);
           }
@@ -227,9 +227,14 @@ export const useNfc = () => {
         await NFC.stopRead();
 
         setIsNfcLoading(false);
+        setIsPinConfirmed(false);
+        setIsPinRequired(false);
         if (debitCardData?.status === "OK" && !error) {
           setIsNfcActionSuccess(true);
         } else {
+          if (debitCardData?.status === "ERROR" && !error) {
+            error = debitCardData;
+          }
           toast.show(
             typeof error?.reason === "string"
               ? error.reason
@@ -240,7 +245,7 @@ export const useNfc = () => {
           );
 
           if (!isIos) {
-            readingNfcLoop(pr);
+            readingNfcLoop(pr, amount);
           }
         }
 

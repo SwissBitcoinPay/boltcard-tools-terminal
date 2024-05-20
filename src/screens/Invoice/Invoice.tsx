@@ -174,7 +174,7 @@ export const Invoice = () => {
                 type: "bitcoin",
                 title: t("startScanning"),
                 onPress: () => {
-                  void readingNfcLoop(lightningInvoice);
+                  void readingNfcLoop(lightningInvoice, satoshis);
                 }
               }
             }
