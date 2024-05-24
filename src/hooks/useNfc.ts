@@ -20,24 +20,26 @@ export const useNfc = () => {
   const [isPinRequired, setIsPinRequired] = useState(false);
   const [isPinConfirmed, setIsPinConfirmed] = useState(false);
 
-  const [ pinResolver, setPinResolver ] = useState({ resolve: null })
+  const [ pinResolver, setPinResolver ] = useState({ resolve: undefined })
 
-  const pinInputPromise = () => {
-      let pinResolver;
-      return [ new Promise(( resolve, reject ) => {
-          pinResolver = resolve
-      }), pinResolver]
+  const setPin = (pin: string) => {
+    if(pinResolver.resolve) {
+      pinResolver.resolve(pin);
+    }
   }
 
-  const getPin = async () => {
-        const [ promise, resolve ] = await pinInputPromise()
-        setPinResolver({ resolve })
-        return promise;
-  }
+  const getPin = useCallback(async () => {
+    const pinInputPromise = () => {
+      let _pinResolver;
+      return [ new Promise(( resolve ) => {
+          _pinResolver = resolve
+      }), _pinResolver]
+    }
 
-  const setPin = async(pin) => {
-        pinResolver.resolve(pin);
-  }
+    const [ promise, resolve ] = pinInputPromise()
+    setPinResolver({ resolve })
+    return promise as Promise<string>;
+  }, []);
 
   const setupNfc = useCallback(async () => {
     if (await getIsNfcSupported()) {
@@ -70,7 +72,8 @@ export const useNfc = () => {
   }, []);
 
   const readingNfcLoop = useCallback(
-    async (pr: string, amount: number) => {
+    async (pr: string, amount?: number | null) => {
+
       setIsNfcActionSuccess(false);
       await NFC.stopRead();
 
@@ -135,35 +138,41 @@ export const useNfc = () => {
               tag: "withdrawRequest";
               callback: string;
               k1: string;
-              pinLimit: number;
+              pinLimit?: number;
             }>(cardData);
 
             let pin = "";
             if (cardDataResponse.pinLimit !== undefined) {
-              //if the card has pin enabled
-              //check the amount didn't exceed the limit
-              const limitSat = cardDataResponse.pinLimit;
-              if (limitSat <= amount) {
-                setIsPinRequired(true);
-                pin = await getPin();
-                setIsPinConfirmed(true);
+
+              if (!amount) {
+                error = { reason: "No amount set. Can't make withdrawRequest"}
+              } else {
+                //if the card has pin enabled
+                //check the amount didn't exceed the limit
+                const limitSat = cardDataResponse.pinLimit;
+                if (limitSat <= amount) {
+                  setIsPinRequired(true);
+                  pin = await getPin();
+                  setIsPinConfirmed(true);
+                }
               }
             } else {
-                setIsPinRequired(false);
+              setIsPinRequired(false);
             }
 
-            const { data: callbackResponseData } = await axios.get<{
-              reason: { detail: string };
-              status: "OK" | "ERROR";
-            }>(cardDataResponse.callback, {
-              params: {
-                k1: cardDataResponse.k1,
-                pr,
-                pin
-              }
-            });
-
-            debitCardData = callbackResponseData;
+            if (!error) {
+              const { data: callbackResponseData } = await axios.get<{
+                reason: { detail: string };
+                status: "OK" | "ERROR";
+              }>(cardDataResponse.callback, {
+                params: {
+                  k1: cardDataResponse.k1,
+                  pr,
+                  pin
+                }
+              })
+              debitCardData = callbackResponseData;
+            }
           } else {
             // const { data: cardRequest } = await axios.get<{ payLink?: string }>(
             //   lnHttpsRequest
@@ -255,7 +264,7 @@ export const useNfc = () => {
         }
       });
     },
-    [toast, t]
+    [toast, t, getPin]
   );
 
   const stopNfc = useCallback(() => {

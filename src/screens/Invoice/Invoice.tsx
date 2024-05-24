@@ -6,7 +6,8 @@ import {
   CheckboxField,
   ComponentStack,
   Loader,
-  Text
+  Text,
+  PinPad
 } from "@components";
 import {
   faBolt,
@@ -31,8 +32,6 @@ import { ListItem } from "@components/ItemsList/components/ListItem";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 import * as S from "./styled";
-
-import { PinPad } from "../PinPad";
 
 const numberWithSpaces = (nb: number) =>
   nb.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -86,7 +85,6 @@ export const Invoice = () => {
 
   const [isScheduledSwap, setIsScheduledSwap] = useState(false);
   const [isSwapLoading, setIsSwapLoading] = useState<boolean>();
-  const [isPinVisible, setIsPinVisible] = useState(true);
   const [swapFees, setSwapFees] = useState<number>();
   const [decodedInvoice, setDecodedInvoice] = useState<PaymentRequestObject>();
 
@@ -114,10 +112,6 @@ export const Invoice = () => {
       setBackgroundColor(colors.success, 500);
     }
   }, [isNfcActionSuccess]);
-
-  useEffect(() => {
-     setIsPinVisible(true)
-  }, [isPinRequired, isPinConfirmed]);
 
   const onGetSwapQuote = useCallback(async () => {
     if (amount) {
@@ -291,7 +285,7 @@ export const Invoice = () => {
           />
         </S.SuccessComponentStack>
       ) : isPinRequired && !isPinConfirmed ? (
-            <PinPad newPin={setPin}/>
+            <PinPad onPinEntered={setPin}/>
       ) : isNfcLoading || isNfcScanning ? (
         <Loader
           reason={t(isNfcLoading ? "payingInvoice" : "tapYourBoltCard")}
