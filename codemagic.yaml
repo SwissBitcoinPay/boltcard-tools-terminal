@@ -61,6 +61,7 @@ workflows:
       cancel_previous_builds: true
     max_build_duration: 120
     instance_type: mac_mini_m1
+    xcode: 15.2
     environment:
       groups:
         - testfairy
