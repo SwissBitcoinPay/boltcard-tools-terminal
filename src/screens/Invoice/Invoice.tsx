@@ -6,7 +6,8 @@ import {
   CheckboxField,
   ComponentStack,
   Loader,
-  Text
+  Text,
+  PinPad
 } from "@components";
 import {
   faBolt,
@@ -61,7 +62,10 @@ export const Invoice = () => {
     isNfcScanning,
     isNfcLoading,
     isNfcNeedsTap,
-    isNfcActionSuccess
+    isNfcActionSuccess,
+    isPinRequired,
+    isPinConfirmed,
+    setPin
   } = useNfc();
 
   const {
@@ -98,9 +102,9 @@ export const Invoice = () => {
 
   useEffect(() => {
     if (isNfcAvailable && !isNfcNeedsTap && lightningInvoice) {
-      void readingNfcLoop(lightningInvoice);
+      void readingNfcLoop(lightningInvoice, satoshis);
     }
-  }, [readingNfcLoop, isNfcAvailable, isNfcNeedsTap, lightningInvoice]);
+  }, [readingNfcLoop, isNfcAvailable, isNfcNeedsTap, lightningInvoice, satoshis]);
 
   useEffect(() => {
     if (isNfcActionSuccess) {
@@ -164,7 +168,7 @@ export const Invoice = () => {
                 type: "bitcoin",
                 title: t("startScanning"),
                 onPress: () => {
-                  void readingNfcLoop(lightningInvoice);
+                  void readingNfcLoop(lightningInvoice, satoshis);
                 }
               }
             }
@@ -280,6 +284,8 @@ export const Invoice = () => {
             onPress={onReturnToHome}
           />
         </S.SuccessComponentStack>
+      ) : isPinRequired && !isPinConfirmed ? (
+            <PinPad onPinEntered={setPin}/>
       ) : isNfcLoading || isNfcScanning ? (
         <Loader
           reason={t(isNfcLoading ? "payingInvoice" : "tapYourBoltCard")}

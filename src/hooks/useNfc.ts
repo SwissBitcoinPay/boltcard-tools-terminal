@@ -17,6 +17,31 @@ export const useNfc = () => {
   const [isNfcNeedsTap, setIsNfcNeedsTap] = useState(false);
   const [isNfcNeedsPermission, setIsNfcNeedsPermission] = useState(false);
   const [isNfcActionSuccess, setIsNfcActionSuccess] = useState(false);
+  const [isPinRequired, setIsPinRequired] = useState(false);
+  const [isPinConfirmed, setIsPinConfirmed] = useState(false);
+
+  const [ pinResolver, setPinResolver ] = useState<{
+    resolve: (v: string) => void;
+  }>();
+
+  const setPin = (pin: string) => {
+    if(pinResolver?.resolve) {
+      pinResolver.resolve(pin);
+    }
+  }
+
+  const getPin = useCallback(async () => {
+    const pinInputPromise = () => {
+      let _pinResolver;
+      return [ new Promise<string>(( resolve ) => {
+          _pinResolver = resolve
+      }), _pinResolver]
+    }
+
+    const [ promise, resolve ] = pinInputPromise()
+    setPinResolver({ resolve } as unknown as { resolve: (v: string) => void })
+    return promise as Promise<string>;
+  }, []);
 
   const setupNfc = useCallback(async () => {
     if (await getIsNfcSupported()) {
@@ -49,7 +74,8 @@ export const useNfc = () => {
   }, []);
 
   const readingNfcLoop = useCallback(
-    async (pr: string) => {
+    async (pr: string, amount?: number | null) => {
+
       setIsNfcActionSuccess(false);
       await NFC.stopRead();
 
@@ -73,7 +99,7 @@ export const useNfc = () => {
           });
 
           if (!isIos) {
-            readingNfcLoop(pr);
+            readingNfcLoop(pr, amount);
           } else {
             setIsNfcAvailable(false);
           }
@@ -114,19 +140,41 @@ export const useNfc = () => {
               tag: "withdrawRequest";
               callback: string;
               k1: string;
+              pinLimit?: number;
             }>(cardData);
 
-            const { data: callbackResponseData } = await axios.get<{
-              reason: { detail: string };
-              status: "OK" | "ERROR";
-            }>(cardDataResponse.callback, {
-              params: {
-                k1: cardDataResponse.k1,
-                pr
-              }
-            });
+            let pin = "";
+            if (cardDataResponse.pinLimit !== undefined) {
 
-            debitCardData = callbackResponseData;
+              if (!amount) {
+                error = { reason: "No amount set. Can't make withdrawRequest"}
+              } else {
+                //if the card has pin enabled
+                //check the amount didn't exceed the limit
+                const limitSat = cardDataResponse.pinLimit;
+                if (limitSat <= amount) {
+                  setIsPinRequired(true);
+                  pin = await getPin();
+                  setIsPinConfirmed(true);
+                }
+              }
+            } else {
+              setIsPinRequired(false);
+            }
+
+            if (!error) {
+              const { data: callbackResponseData } = await axios.get<{
+                reason: { detail: string };
+                status: "OK" | "ERROR";
+              }>(cardDataResponse.callback, {
+                params: {
+                  k1: cardDataResponse.k1,
+                  pr,
+                  pin
+                }
+              })
+              debitCardData = callbackResponseData;
+            }
           } else {
             // const { data: cardRequest } = await axios.get<{ payLink?: string }>(
             //   lnHttpsRequest
@@ -190,9 +238,14 @@ export const useNfc = () => {
         await NFC.stopRead();
 
         setIsNfcLoading(false);
+        setIsPinConfirmed(false);
+        setIsPinRequired(false);
         if (debitCardData?.status === "OK" && !error) {
           setIsNfcActionSuccess(true);
         } else {
+          if (debitCardData?.status === "ERROR" && !error) {
+            error = debitCardData;
+          }
           toast.show(
             typeof error?.reason === "string"
               ? error.reason
@@ -203,7 +256,7 @@ export const useNfc = () => {
           );
 
           if (!isIos) {
-            readingNfcLoop(pr);
+            readingNfcLoop(pr, amount);
           }
         }
 
@@ -213,7 +266,7 @@ export const useNfc = () => {
         }
       });
     },
-    [toast, t]
+    [toast, t, getPin]
   );
 
   const stopNfc = useCallback(() => {
@@ -233,6 +286,9 @@ export const useNfc = () => {
     isNfcNeedsTap,
     isNfcNeedsPermission,
     isNfcActionSuccess,
+    isPinRequired,
+    isPinConfirmed,
+    setPin,
     setupNfc,
     stopNfc,
     readingNfcLoop

@@ -39,3 +39,4 @@ export { SplashScreen } from "./SplashScreen";
 export { StatusBar } from "./StatusBar";
 export { CircleProgress } from "./CircleProgress";
 export { BitcoinIcon } from "./BitcoinIcon";
+export { PinPad } from "./PinPad";
