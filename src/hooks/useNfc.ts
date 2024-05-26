@@ -20,10 +20,12 @@ export const useNfc = () => {
   const [isPinRequired, setIsPinRequired] = useState(false);
   const [isPinConfirmed, setIsPinConfirmed] = useState(false);
 
-  const [ pinResolver, setPinResolver ] = useState({ resolve: undefined })
+  const [ pinResolver, setPinResolver ] = useState<{
+    resolve: (v: string) => void;
+  }>();
 
   const setPin = (pin: string) => {
-    if(pinResolver.resolve) {
+    if(pinResolver?.resolve) {
       pinResolver.resolve(pin);
     }
   }
@@ -31,13 +33,13 @@ export const useNfc = () => {
   const getPin = useCallback(async () => {
     const pinInputPromise = () => {
       let _pinResolver;
-      return [ new Promise(( resolve ) => {
+      return [ new Promise<string>(( resolve ) => {
           _pinResolver = resolve
       }), _pinResolver]
     }
 
     const [ promise, resolve ] = pinInputPromise()
-    setPinResolver({ resolve })
+    setPinResolver({ resolve } as unknown as { resolve: (v: string) => void })
     return promise as Promise<string>;
   }, []);
 

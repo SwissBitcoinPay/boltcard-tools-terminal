@@ -15,6 +15,8 @@ type PinPadProps = {
   onPinEntered: (pin: string) => void;
 }
 
+const LeftButton = () => <Icon icon={faDeleteLeft} size={36} color={"#FFF"} />;
+
 export const PinPad = (props: PinPadProps) => {
   const pinView = useRef<PinViewFunctions>(null);
   const bottomDrawerRef = useRef<BottomDrawerMethods>(null);
@@ -37,7 +39,7 @@ export const PinPad = (props: PinPadProps) => {
       if (buttonPressed === "custom_left" && pinView.current) {
         pinView.current.clearAll()
       }
-  }, [buttonPressed])
+  }, [buttonPressed]);
 
   return (
     <>
@@ -55,6 +57,7 @@ export const PinPad = (props: PinPadProps) => {
               </S.PinPadTitle>
               <ReactNativePinView
                 inputSize={32}
+                // @ts-ignore
                 ref={pinView}
                 pinLength={4}
                 buttonSize={60}
@@ -66,7 +69,8 @@ export const PinPad = (props: PinPadProps) => {
                 buttonViewStyle={S.PinViewStyles.whiteBorder}
                 buttonTextStyle={{ color: "#FFF" }}
                 onButtonPress={key => setButtonPressed(key)}
-                customLeftButton={showRemoveButton ? <Icon icon={faDeleteLeft} size={36} color={"#FFF"} /> : undefined}
+                // @ts-ignore
+                customLeftButton={showRemoveButton ? <LeftButton /> : undefined}
               />
             </S.PinPadContainer>
         </BottomDrawer >
